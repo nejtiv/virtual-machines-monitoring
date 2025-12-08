@@ -4,6 +4,7 @@ from pydantic import ValidationError
 from ..models.models_vmping import vmcreate, vmread, vmupdate
 from ..db_connection import sa, engine
 from ..registered_tables import virtualmachines
+from ..services.vm_ping import vm_ping
 
 vm = Blueprint("vm", __name__)
 
@@ -24,6 +25,7 @@ def vm_add():
 @vm.route("/display", methods=["GET"])
 def vm_read():
     try:
+        vm_ping()
         select_query = sa.select(virtualmachines)
         with engine.begin() as connection:
             result = connection.execute(select_query).fetchall()
