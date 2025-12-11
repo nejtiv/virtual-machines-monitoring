@@ -7,7 +7,9 @@ def create_app():
 
     #===REGISTER BLUEPRINTS
     from .routes.crud_vmping import vm
+    from .routes.routes_rdp import rdp
 
     app.register_blueprint(vm, url_prefix="/api/vm")
+    app.register_blueprint(rdp, url_prefix="/api/rdp")
 
     return app
