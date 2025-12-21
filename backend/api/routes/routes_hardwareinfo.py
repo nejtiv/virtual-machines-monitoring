@@ -13,7 +13,9 @@ def check(id):
         select_query = sa.select(hardwareinfo.c.ipv4).where(hardwareinfo.c.vm_id == id)
         with engine.begin() as connection:
             result = connection.execute(select_query).fetchone()
+        #Calling function to check the virtual machines hardware parameters
         check_info = check_hardware(id = id, result = result)
+        #This is matching for result of function execution to BaseModel
         dto = hardwareupdate(**check_info)
         update_query = sa.update(hardwareinfo).where(hardwareinfo.c.vm_id == id).values(**dto.model_dump())
         with engine.begin() as connection: 

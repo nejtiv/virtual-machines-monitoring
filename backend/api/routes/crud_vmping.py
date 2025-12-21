@@ -16,10 +16,13 @@ def vm_add():
         return jsonify({"error": e.errors}), 400
     insert_query = sa.insert(virtualmachines).values(**dto.model_dump())
     try:
+        #Query to register virtual machine
         with engine.begin() as connection:
             result = connection.execute(insert_query)
+        #Retrieve the ID incremented with insert data to create record
         new_vm_id = result.inserted_primary_key[0]
         insert_monitoring_query = sa.insert(hardwareinfo).values(ipv4 = dto.ipv4, vm_id = new_vm_id)
+        #Query to add virtual machine to monitoring
         with engine.begin() as connection:
             connection.execute(insert_monitoring_query)
         return jsonify({"message": "Virtual Machine registered successfully!"}), 201
@@ -29,8 +32,10 @@ def vm_add():
 @vm.route("/display", methods=["GET"])
 def vm_read():
     try:
+        #Calling function that pings virtual machine and updates its status
         vm_ping()
         select_query = sa.select(virtualmachines)
+        #Query to display registered virtual machines
         with engine.begin() as connection:
             result = connection.execute(select_query).fetchall()
         data = [
@@ -48,11 +53,13 @@ def vm_update(id):
     except ValidationError as e:
         return jsonify({"error": e.errors}), 400
     try:
+        #Formatting updated info for key, value
         updated_info = {
             key: value 
             for key, value in dto.model_dump().items()
             if value is not None
         } 
+        #Query to update the virtual machine with formatted values based on checked id
         update_query = sa.update(virtualmachines).where(virtualmachines.c.vm_id == id).values(**updated_info)
         with engine.begin() as connection:
             connection.execute(update_query)
