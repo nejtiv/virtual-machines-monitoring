@@ -14,13 +14,13 @@ def get_size(bytes, suffix="B"):
 
 def get_hardware():
     info = {
-        "CPU Usage Percentage": psutil.cpu_percent(1),
-        "Memory Total": get_size(memory.total),
-        "Memory Used": get_size(memory.used),
-        "Memory Available": get_size(memory.available),
-        "Disk Total Size": get_size(disks.total),
-        "Disk Used": get_size(disks.used),
-        "Disk Used Percentage": disks.percent,
-        "Disk Free": get_size(disks.free),
+        "cpu_used": psutil.cpu_percent(1),
+        "memory_total": get_size(memory.total),
+        "memory_used": get_size(memory.used),
+        "memory_free": get_size(memory.available),
+        "disk_total_size": get_size(disks.total),
+        "disk_used": get_size(disks.used),
+        "disk_used_percent": disks.percent,
+        "disk_free": get_size(disks.free),
     }
     return info
