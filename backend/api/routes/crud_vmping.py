@@ -3,7 +3,7 @@ from flask import Blueprint, jsonify, request
 from pydantic import ValidationError
 from ..models.models_vmping import vmcreate, vmread, vmupdate
 from ..db_connection import sa, engine
-from ..registered_tables import virtualmachines
+from ..registered_tables import virtualmachines, hardwareinfo
 from ..services.vm_ping import vm_ping
 
 vm = Blueprint("vm", __name__)
@@ -17,7 +17,11 @@ def vm_add():
     insert_query = sa.insert(virtualmachines).values(**dto.model_dump())
     try:
         with engine.begin() as connection:
-            connection.execute(insert_query)
+            result = connection.execute(insert_query)
+        new_vm_id = result.inserted_primary_key[0]
+        insert_monitoring_query = sa.insert(hardwareinfo).values(ipv4 = dto.ipv4, vm_id = new_vm_id)
+        with engine.begin() as connection:
+            connection.execute(insert_monitoring_query)
         return jsonify({"message": "Virtual Machine registered successfully!"}), 201
     except Exception as e: 
         return jsonify({"error": f"An error occured during registration of the Virtual Machine. Details: {e}"}), 500
