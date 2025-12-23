@@ -8,3 +8,11 @@ def check_hardware(ipv4: str):
         return response.json()
     else:
         return response.status_code()
+    
+def check_online(ipv4: str):
+    #Request to the agent to check if the agent is online [TEST PURPOSE]
+    response = requests.post(f"http://{ipv4}:5000/check_online", timeout=5)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return response.status_code()

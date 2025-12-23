@@ -7,3 +7,8 @@ hardware = Blueprint("hardware", __name__)
 async def hardware_get():
     info = get_hardware()
     return jsonify(info), 200
+
+@hardware.route("/check_online", methods=["POST"])
+async def online_check():
+    return jsonify({"message": "The agent is online..."}), 200
+    
