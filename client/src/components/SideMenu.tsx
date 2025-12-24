@@ -9,7 +9,7 @@ type SideMenuProps = {
 //Side Menu Component
 const SideMenu = ({children}: SideMenuProps) => {
     return(
-        <aside className="w-60 flex flex-col">
+        <aside className="w-60 flex flex-col border-r border-gray-200">
             {children}
         </aside>
     )

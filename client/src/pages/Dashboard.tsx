@@ -66,7 +66,27 @@ function Dashboard() {
             </a>
           </div>
         </SideMenu>
-        <MainBoard></MainBoard>
+        <MainBoard>
+          <h1 className="p-1 pl-3 text-2xl font-bold border-b border-gray-200 bg-white">Monitoring Overview</h1>
+          <div className="m-5 h-auto flex gap-3">
+            <div className="container mx-auto px-4 m-4 border rounded-md border-gray-200 bg-white">
+              <a className="block font-semibold text-green-800">Virtual Machines Online:</a>
+              <a className="block font-semibold text-red-800">Virtual Machines Offline:</a>
+            </div>
+            <div className="container mx-auto px-4 m-4 border rounded-md border-gray-200 bg-white">
+              <a className="block font-semibold">CPU Usage per VM:</a>
+              <a className="block font-semibold">RAM Usage per VM:</a>
+            </div>
+          </div>
+          <div className="m-5 h-auto flex gap-3">
+            <div className="container mx-auto px-4 m-4 border rounded-md border-gray-200 bg-white">
+              Pie Chart VM Online/Offline
+            </div>
+            <div className="container mx-auto px-4 m-4 border rounded-md border-gray-200 bg-white">
+              Bar Chart CPU/RAM Usage
+            </div>
+          </div>
+        </MainBoard>
       </Layout>
     </>
   );
