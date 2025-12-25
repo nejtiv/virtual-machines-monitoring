@@ -5,8 +5,30 @@ import Layout from "../components/Layout";
 import MainBoard from "../components/MainBoard";
 import SideMenu from "../components/SideMenu";
 
+//React import
+import { useEffect, useState } from "react";
+
+//Services import
+import {getVMStatuses} from "../services/overviewService";
+import type {VmProps} from "../services/overviewService";
+
 //Main page
 function Dashboard() {
+  const [vmData, setVmData] = useState<VmProps>({ online: "0", offline: "0" });
+
+  //Get VM Statuses Call
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await getVMStatuses();
+        setVmData(result);
+      } catch (error) {
+        console.error("Error fetching VM statuses:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
     <>
       <Layout>
@@ -75,10 +97,10 @@ function Dashboard() {
           <div className="m-5 h-auto flex gap-3">
             <div className="container mx-auto px-4 m-4 border rounded-md border-gray-200 bg-white">
               <a className="block font-semibold text-green-800">
-                Virtual Machines Online:
+                Virtual Machines Online: {vmData.online}
               </a>
               <a className="block font-semibold text-red-800">
-                Virtual Machines Offline:
+                Virtual Machines Offline: {vmData.offline}
               </a>
             </div>
             <div className="container mx-auto px-4 m-4 border rounded-md border-gray-200 bg-white">
