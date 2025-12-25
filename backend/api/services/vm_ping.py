@@ -18,7 +18,7 @@ def vm_ping():
         vm_id = row[0]
         vm_ip = row[1]
         ping = os.system(f"ping {param} 1 {vm_ip}")
-        status = "aviable" if ping == 0 else "offline"
+        status = "online" if ping == 0 else "offline"
 
         #Query to update 
         update_query = sa.update(virtualmachines).where(virtualmachines.c.vm_id == vm_id).values(vm_status=status)
