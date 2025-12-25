@@ -11,9 +11,11 @@ def create_app():
     from .routes.crud_vmping import vm
     from .routes.routes_rdp import rdp
     from .routes.routes_hardwareinfo import hardware_check
+    from .analytics.routes_analytics import analytics
 
     app.register_blueprint(vm, url_prefix="/api/vm")
     app.register_blueprint(rdp, url_prefix="/api/rdp")
     app.register_blueprint(hardware_check, url_prefix="/api/hardware_check")
+    app.register_blueprint(analytics, url_prefix="/api/analytics")
 
     return app
