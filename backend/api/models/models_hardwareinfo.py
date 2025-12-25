@@ -12,7 +12,8 @@ class hardwareread(BaseModel):
     disk_used_percent: str
     memory_total: str
     memory_used: str
-    memory_free: str 
+    memory_free: str
+    memory_used_percent: float
 
 class hardwareupdate(BaseModel):
     cpu_used: Optional[float] = None
@@ -23,3 +24,4 @@ class hardwareupdate(BaseModel):
     memory_total: Optional[str] = None
     memory_used: Optional[str] = None
     memory_free: Optional[str] = None 
+    memory_used_percent: Optional[float] = None

@@ -18,6 +18,7 @@ def get_hardware():
         "memory_total": get_size(memory.total),
         "memory_used": get_size(memory.used),
         "memory_free": get_size(memory.available),
+        "memory_used_percent" : memory.percent(),
         "disk_total_size": get_size(disks.total),
         "disk_used": get_size(disks.used),
         "disk_used_percent": disks.percent,
