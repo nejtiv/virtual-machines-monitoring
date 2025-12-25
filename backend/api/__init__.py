@@ -1,9 +1,11 @@
 #===APP INITIALIZATION
 from flask import Flask
+from flask_cors import CORS
 
 #===INIT APP
 def create_app():
     app = Flask(__name__)
+    CORS(app)
 
     #===REGISTER BLUEPRINTS
     from .routes.crud_vmping import vm
