@@ -1,4 +1,6 @@
 //Components import
+import BarChart from "../components/charts/BarChart";
+import PieChart from "../components/charts/PieChart";
 import Layout from "../components/Layout";
 import MainBoard from "../components/MainBoard";
 import SideMenu from "../components/SideMenu";
@@ -86,10 +88,10 @@ function Dashboard() {
           </div>
           <div className="m-5 h-auto flex gap-3">
             <div className="container mx-auto px-4 m-4 border rounded-md border-gray-200 bg-white">
-              Pie Chart VM Online/Offline
+              <PieChart/>
             </div>
             <div className="container mx-auto px-4 m-4 border rounded-md border-gray-200 bg-white">
-              Bar Chart CPU/RAM Usage
+              <BarChart/>
             </div>
           </div>
         </MainBoard>

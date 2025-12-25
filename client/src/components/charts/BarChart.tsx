@@ -10,7 +10,7 @@ const BarChart = () => {
     // Fetch data from API
     const fetchData = async () => {
       try {
-        const response = await axios.get('YOUR_API_ENDPOINT_HERE');
+        const response = await axios.get('http://127.0.0.1:5000/api/analytics/vm/ram_cpu_usage');
         const data = response.data;
 
         // Mock data for demonstration
@@ -65,8 +65,10 @@ const BarChart = () => {
     };
 
     fetchData();
+    const interval = setInterval(fetchData, 2000)
 
     return () => {
+      clearInterval(interval)
       if (chartInstance.current) {
         chartInstance.current.destroy();
       }
