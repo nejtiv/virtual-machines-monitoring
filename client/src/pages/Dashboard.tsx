@@ -7,14 +7,29 @@ import SideMenu from "../components/SideMenu";
 
 //React import
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-//Services import
+//Services and types import
 import {getVMStatuses} from "../services/overviewService";
 import type {VmProps} from "../services/overviewService";
 
 //Main page
 function Dashboard() {
   const [vmData, setVmData] = useState<VmProps>({ online: "0", offline: "0" });
+
+  //declare navigate
+  const navigate = useNavigate()
+
+  //Navigation between sites
+  const navigateHome = () => {
+    navigate("/")
+  }
+  const navigateVM = () => {
+    navigate("/virtual-machines")
+  }
+  const navigateRDP = () => {
+    navigate("/rdp-sessions")
+  }
 
   //Get VM Statuses Call
   useEffect(() => {
@@ -33,11 +48,11 @@ function Dashboard() {
     <>
       <Layout>
         <SideMenu>
-          <h1 className="p-1 text-2xl text-blue-700 font-bold border-b border-gray-200">
+          <h1 className="p-1 text-2xl text-blue-700 font-bold border-b border-gray-200 cursor-pointer" onClick={navigateHome}>
             Lileye Monitor
           </h1>
           <div className="flex flex-col mt-5 gap-3">
-            <a className="p-1 flex bg-white items-center font-semibold text-blue-700 text-left hover:text-blue-900 hover:bg-gray-200 transition-colors">
+            <a className="p-1 flex bg-white items-center font-semibold text-blue-700 text-left hover:text-blue-900 hover:bg-gray-200 transition-colors cursor-pointer" onClick={navigateHome}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -54,7 +69,7 @@ function Dashboard() {
               </svg>
               Overview
             </a>
-            <a className="p-1 flex bg-white items-center font-semibold text-blue-700 text-left hover:text-blue-900 hover:bg-gray-200 transition-colors">
+            <a className="p-1 flex bg-white items-center font-semibold text-blue-700 text-left hover:text-blue-900 hover:bg-gray-200 transition-colors cursor-pointer" onClick={navigateVM}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -71,7 +86,7 @@ function Dashboard() {
               </svg>
               Virtual Machines
             </a>
-            <a className="p-1 flex bg-white items-center font-semibold text-blue-700 text-left hover:text-blue-900 hover:bg-gray-200 transition-colors">
+            <a className="p-1 flex bg-white items-center font-semibold text-blue-700 text-left hover:text-blue-900 hover:bg-gray-200 transition-colors cursor-pointer" onClick={navigateRDP}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
