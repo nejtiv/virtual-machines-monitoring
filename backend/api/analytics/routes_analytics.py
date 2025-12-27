@@ -1,5 +1,6 @@
 #===ROUTES FOR ANALYTICS SERVICE [DASHBOARD, NOT JUST DISPLAYING PLAIN TABLE FROM SQL]
 from flask import Blueprint, request, jsonify
+from ..models.models_hardwareinfo import hardwareread
 from ..db_connection import sa, engine
 from ..registered_tables import virtualmachines, hardwareinfo
 
@@ -37,3 +38,18 @@ def get_ram_cpu_usage():
         }), 200
     except Exception as e:
         return jsonify({"error": f"An error occured during fetching resource usage per Virtual Machine. Details: {e}"}), 500
+    
+@analytics.route("/vm/health_monitor", methods=["GET"])
+def get_health_monitor():
+    try:
+        #Query to retrieve the health monitor table
+        select_query = sa.select(hardwareinfo)
+        with engine.begin() as connection:
+            result = connection.execute(select_query).fetchall()
+        data = [
+            hardwareread.model_validate(row._mapping).model_dump()
+            for row in result
+        ]
+        return jsonify(data), 200
+    except Exception as e:
+        return jsonify({"error": f"An error occured during fetching data for health monitor of the Virtual Machine. Details: {e}"}), 500
