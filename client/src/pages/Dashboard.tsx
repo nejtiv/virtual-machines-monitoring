@@ -4,18 +4,33 @@ import PieChart from "../components/charts/PieChart";
 import Layout from "../components/Layout";
 import MainBoard from "../components/MainBoard";
 import SideMenu from "../components/SideMenu";
+import Button from "../components/Button";
 
 //React import
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 //Services and types import
-import {getVMStatuses} from "../services/overviewService";
-import type {VmProps} from "../services/overviewService";
+import {getVMStatuses, getHealthMonitor} from "../services/overviewService";
+import type {HealthMonitorProps, VmProps} from "../services/overviewService";
 
 //Main page
 function Dashboard() {
   const [vmData, setVmData] = useState<VmProps>({ online: "0", offline: "0" });
+  const [healthMonitor, setHealthMonitor] = useState<HealthMonitorProps[]>([])
+  const [expandedRows, setExpandedRows] = useState<Record<number, boolean>>({})
+
+  const toggleRow = (id: number) => {
+    setExpandedRows((prev) => ({ ...prev, [id]: !prev[id] }))
+  }
+
+  const formatNumber = (value: number | string | undefined | null, suffix = "") => {
+    if (value === null || value === undefined) return "-"
+    const raw = typeof value === "number" ? value : String(value).replace(/\s/g, "")
+    const parsed = parseFloat(String(raw).replace('%', '').replace(',', '.'))
+    if (Number.isNaN(parsed)) return String(value)
+    return `${parsed.toFixed(2)}${suffix}`
+  }
 
   //declare navigate
   const navigate = useNavigate()
@@ -30,6 +45,21 @@ function Dashboard() {
   const navigateRDP = () => {
     navigate("/rdp-sessions")
   }
+
+  //Get Health Monitor
+  useEffect(() => {
+    const fetchHealthMonitor = async () => {
+      try{
+        const result = await getHealthMonitor()
+        if (result !== null && result !== undefined){
+          setHealthMonitor(Array.isArray(result) ? result : [result])
+        }
+      }catch(error){
+        console.error(error);
+      }
+    };
+    fetchHealthMonitor();
+  }, [])
 
   //Get VM Statuses Call
   useEffect(() => {
@@ -118,10 +148,6 @@ function Dashboard() {
                 Virtual Machines Offline: {vmData.offline}
               </a>
             </div>
-            <div className="container mx-auto px-4 m-4 border rounded-md border-gray-200 bg-white">
-              <a className="block font-semibold">CPU Usage per VM:</a>
-              <a className="block font-semibold">RAM Usage per VM:</a>
-            </div>
           </div>
           <div className="m-5 h-auto flex gap-3">
             <div className="container mx-auto px-4 m-4 border rounded-md border-gray-200 bg-white">
@@ -131,6 +157,80 @@ function Dashboard() {
               <BarChart/>
             </div>
           </div>
+          <div className="m-5 h-auto border-gray-200 flex gap-3">
+          <div className="container mx-auto px-4 m-4 rounded-md border-gray-200 bg-white">
+            <h2 className="p-1 pl-3 text-xl font-semibold border-b border-gray-200 bg-white">
+              Virtual Machines Health Monitor
+            </h2>
+            <div className="m-4 overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-white">
+                  <tr>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Machine ID</th>
+                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">VM ID</th>
+                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">CPU Used (%)</th>
+                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Disk Used (%)</th>
+                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Memory Used (%)</th>
+                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-white divide-y divide-gray-100">
+                  {healthMonitor.map((data) => (
+                    <>
+                      <tr key={data.machine_id} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{data.machine_id}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{data.vm_id}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right">{formatNumber(data.cpu_used, "%")}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right">{formatNumber(data.disk_used_percent, "%")}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right">{formatNumber(data.memory_used_percent, "%")}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
+                          <Button
+                            className="px-3 py-1 bg-blue-600 hover:bg-blue-800 text-white text-sm rounded transition-colors"
+                            onClick={() => toggleRow(data.machine_id)}
+                          >
+                            {expandedRows[data.machine_id] ? "Hide" : "Details"}
+                          </Button>
+                        </td>
+                      </tr>
+                      {expandedRows[data.machine_id] && (
+                        <tr key={`${data.machine_id}-details`} className="bg-gray-50">
+                          <td colSpan={6} className="px-6 py-4">
+                            <div className="grid grid-cols-2 gap-4 text-sm text-gray-700">
+                              <div>
+                                <div className="font-semibold">Disk Total</div>
+                                <div>{data.disk_total_size}</div>
+                              </div>
+                              <div>
+                                <div className="font-semibold">Disk Free</div>
+                                <div>{data.disk_free}</div>
+                              </div>
+                              <div>
+                                <div className="font-semibold">Disk Used</div>
+                                <div>{data.disk_used}</div>
+                              </div>
+                              <div>
+                                <div className="font-semibold">Memory Total</div>
+                                <div>{data.memory_total}</div>
+                              </div>
+                              <div>
+                                <div className="font-semibold">Memory Used</div>
+                                <div>{data.memory_used}</div>
+                              </div>
+                              <div>
+                                <div className="font-semibold">Memory Free</div>
+                                <div>{data.memory_free}</div>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
         </MainBoard>
       </Layout>
     </>
