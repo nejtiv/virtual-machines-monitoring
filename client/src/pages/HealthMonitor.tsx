@@ -165,7 +165,7 @@ function HealthMonitor() {
                         </td>
                         <td className="px-6 py-4 text-center">
                           <Button
-                            className="px-3 py-1 bg-blue-600 hover:bg-blue-800 text-white text-sm rounded"
+                            className="px-3 py-1 bg-blue-600 hover:bg-blue-800 transition-colors text-white text-sm rounded"
                             onClick={() => toggleRow(data.machine_id)}
                           >
                             {expandedRows[data.machine_id]

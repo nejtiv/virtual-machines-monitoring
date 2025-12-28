@@ -189,7 +189,7 @@ function RDPSessions() {
                         <td className="px-6 py-4 whitespace-nowrap text-center text-sm">
                           <div className="flex justify-center gap-2">
                             <Button
-                              className="bg-indigo-600 text-white rounded"
+                              className="bg-indigo-600 hover:bg-indigo-800 transition-colors text-white rounded"
                               onClick={async () => handleCreateSession(vm.vm_id)}
                             >
                               Create Session

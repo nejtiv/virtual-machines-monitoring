@@ -229,9 +229,9 @@ function VirtualMachines() {
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-center text-sm">
                           <div className="flex justify-center gap-2">
-                            <Button className="bg-yellow-400 text-white rounded" onClick={() => handleVMUpdate(vm.vm_id)}>Edit</Button>
+                            <Button className="bg-yellow-400 hover:bg-yellow-500 transition-colors text-white rounded" onClick={() => handleVMUpdate(vm.vm_id)}>Edit</Button>
                               <Button
-                                className="bg-red-500 text-white rounded"
+                                className="bg-red-500 hover:bg-red-700 transition-colors text-white rounded"
                                 onClick={async () => {
                                   const ok = window.confirm(`Delete VM ${vm.vm_name} (${vm.vm_id})?`);
                                   if (!ok) return;
@@ -253,7 +253,7 @@ function VirtualMachines() {
               </table>
             </div>
             <div className="flex justify-end mt-4">
-              <Button className="bg-blue-600 text-white rounded" onClick={() => openModal(null)}>Add</Button>
+              <Button className="bg-blue-600 text-white rounded hover:bg-blue-800 transition-colors" onClick={() => openModal(null)}>Add</Button>
             </div>
             {isModalOpen && (
               <Modal isOpen={isModalOpen} title={selectedVm ? "Edit Virtual Machine" : "Add Virtual Machine"} onClose={closeModal}>
