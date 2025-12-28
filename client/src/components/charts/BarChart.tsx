@@ -11,6 +11,7 @@ const BarChart = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get('http://127.0.0.1:5000/api/analytics/vm/ram_cpu_usage');
+        await axios.put('http://127.0.0.1:5000/api/hardware_check/check')
         const data = response.data;
 
         // Mock data for demonstration
@@ -48,6 +49,9 @@ const BarChart = () => {
                 ],
               },
               options: {
+                animation: {
+                  duration: 0
+                },
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {

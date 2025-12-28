@@ -4,62 +4,35 @@ import PieChart from "../components/charts/PieChart";
 import Layout from "../components/Layout";
 import MainBoard from "../components/MainBoard";
 import SideMenu from "../components/SideMenu";
-import Button from "../components/Button";
 
 //React import
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 //Services and types import
-import {getVMStatuses, getHealthMonitor} from "../services/overviewService";
-import type {HealthMonitorProps, VmProps} from "../services/overviewService";
+import { getVMStatuses } from "../services/overviewService";
+import type { VmProps } from "../services/overviewService";
 
 //Main page
 function Dashboard() {
   const [vmData, setVmData] = useState<VmProps>({ online: "0", offline: "0" });
-  const [healthMonitor, setHealthMonitor] = useState<HealthMonitorProps[]>([])
-  const [expandedRows, setExpandedRows] = useState<Record<number, boolean>>({})
-
-  const toggleRow = (id: number) => {
-    setExpandedRows((prev) => ({ ...prev, [id]: !prev[id] }))
-  }
-
-  const formatNumber = (value: number | string | undefined | null, suffix = "") => {
-    if (value === null || value === undefined) return "-"
-    const raw = typeof value === "number" ? value : String(value).replace(/\s/g, "")
-    const parsed = parseFloat(String(raw).replace('%', '').replace(',', '.'))
-    if (Number.isNaN(parsed)) return String(value)
-    return `${parsed.toFixed(2)}${suffix}`
-  }
 
   //declare navigate
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   //Navigation between sites
   const navigateHome = () => {
-    navigate("/")
-  }
+    navigate("/");
+  };
   const navigateVM = () => {
-    navigate("/virtual-machines")
-  }
+    navigate("/virtual-machines");
+  };
+  const navigateHM = () => {
+    navigate("/health-monitor");
+  };
   const navigateRDP = () => {
-    navigate("/rdp-sessions")
-  }
-
-  //Get Health Monitor
-  useEffect(() => {
-    const fetchHealthMonitor = async () => {
-      try{
-        const result = await getHealthMonitor()
-        if (result !== null && result !== undefined){
-          setHealthMonitor(Array.isArray(result) ? result : [result])
-        }
-      }catch(error){
-        console.error(error);
-      }
-    };
-    fetchHealthMonitor();
-  }, [])
+    navigate("/rdp-sessions");
+  };
 
   //Get VM Statuses Call
   useEffect(() => {
@@ -78,11 +51,17 @@ function Dashboard() {
     <>
       <Layout>
         <SideMenu>
-          <h1 className="p-1 text-2xl text-blue-700 font-bold border-b border-gray-200 cursor-pointer" onClick={navigateHome}>
+          <h1
+            className="p-1 text-2xl text-blue-700 font-bold border-b border-gray-200 cursor-pointer"
+            onClick={navigateHome}
+          >
             Lileye Monitor
           </h1>
           <div className="flex flex-col mt-5 gap-3">
-            <a className="p-1 flex bg-white items-center font-semibold text-blue-700 text-left hover:text-blue-900 hover:bg-gray-200 transition-colors cursor-pointer" onClick={navigateHome}>
+            <a
+              className="p-1 flex bg-white items-center font-semibold text-blue-700 text-left hover:text-blue-900 hover:bg-gray-200 transition-colors cursor-pointer"
+              onClick={navigateHome}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -99,7 +78,10 @@ function Dashboard() {
               </svg>
               Overview
             </a>
-            <a className="p-1 flex bg-white items-center font-semibold text-blue-700 text-left hover:text-blue-900 hover:bg-gray-200 transition-colors cursor-pointer" onClick={navigateVM}>
+            <a
+              className="p-1 flex bg-white items-center font-semibold text-blue-700 text-left hover:text-blue-900 hover:bg-gray-200 transition-colors cursor-pointer"
+              onClick={navigateVM}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -116,7 +98,35 @@ function Dashboard() {
               </svg>
               Virtual Machines
             </a>
-            <a className="p-1 flex bg-white items-center font-semibold text-blue-700 text-left hover:text-blue-900 hover:bg-gray-200 transition-colors cursor-pointer" onClick={navigateRDP}>
+            <a
+              className="p-1 flex bg-white items-center font-semibold text-blue-700 text-left hover:text-blue-900 hover:bg-gray-200 transition-colors cursor-pointer"
+              onClick={navigateHM}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                />
+              </svg>
+              Health Monitor
+            </a>
+            <a
+              className="p-1 flex bg-white items-center font-semibold text-blue-700 text-left hover:text-blue-900 hover:bg-gray-200 transition-colors cursor-pointer"
+              onClick={navigateRDP}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -151,86 +161,12 @@ function Dashboard() {
           </div>
           <div className="m-5 h-auto flex gap-3">
             <div className="container mx-auto px-4 m-4 border rounded-md border-gray-200 bg-white">
-              <PieChart/>
+              <PieChart />
             </div>
             <div className="container mx-auto px-4 m-4 border rounded-md border-gray-200 bg-white">
-              <BarChart/>
+              <BarChart />
             </div>
           </div>
-          <div className="m-5 h-auto border-gray-200 flex gap-3">
-          <div className="container mx-auto px-4 m-4 rounded-md border-gray-200 bg-white">
-            <h2 className="p-1 pl-3 text-xl font-semibold border-b border-gray-200 bg-white">
-              Virtual Machines Health Monitor
-            </h2>
-            <div className="m-4 overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-white">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Machine ID</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">VM ID</th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">CPU Used (%)</th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Disk Used (%)</th>
-                    <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Memory Used (%)</th>
-                    <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-100">
-                  {healthMonitor.map((data) => (
-                    <>
-                      <tr key={data.machine_id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{data.machine_id}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{data.vm_id}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right">{formatNumber(data.cpu_used, "%")}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right">{formatNumber(data.disk_used_percent, "%")}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right">{formatNumber(data.memory_used_percent, "%")}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-center">
-                          <Button
-                            className="px-3 py-1 bg-blue-600 hover:bg-blue-800 text-white text-sm rounded transition-colors"
-                            onClick={() => toggleRow(data.machine_id)}
-                          >
-                            {expandedRows[data.machine_id] ? "Hide" : "Details"}
-                          </Button>
-                        </td>
-                      </tr>
-                      {expandedRows[data.machine_id] && (
-                        <tr key={`${data.machine_id}-details`} className="bg-gray-50">
-                          <td colSpan={6} className="px-6 py-4">
-                            <div className="grid grid-cols-2 gap-4 text-sm text-gray-700">
-                              <div>
-                                <div className="font-semibold">Disk Total</div>
-                                <div>{data.disk_total_size}</div>
-                              </div>
-                              <div>
-                                <div className="font-semibold">Disk Free</div>
-                                <div>{data.disk_free}</div>
-                              </div>
-                              <div>
-                                <div className="font-semibold">Disk Used</div>
-                                <div>{data.disk_used}</div>
-                              </div>
-                              <div>
-                                <div className="font-semibold">Memory Total</div>
-                                <div>{data.memory_total}</div>
-                              </div>
-                              <div>
-                                <div className="font-semibold">Memory Used</div>
-                                <div>{data.memory_used}</div>
-                              </div>
-                              <div>
-                                <div className="font-semibold">Memory Free</div>
-                                <div>{data.memory_free}</div>
-                              </div>
-                            </div>
-                          </td>
-                        </tr>
-                      )}
-                    </>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
         </MainBoard>
       </Layout>
     </>

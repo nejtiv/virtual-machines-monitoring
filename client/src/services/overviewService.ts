@@ -35,5 +35,6 @@ export const getHealthMonitor = async () =>{
     const response = await axios.get<HealthMonitorProps>(
         "http://127.0.0.1:5000/api/analytics/vm/health_monitor"
     )
+    await axios.put('http://127.0.0.1:5000/api/hardware_check/check')
     return response.data;
 }
