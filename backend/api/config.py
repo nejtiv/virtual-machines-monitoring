@@ -6,6 +6,8 @@ load_dotenv()
 
 class Config(object):
     SECRET_KEY = os.environ.get("SECRET_KEY")
+    SCHEDULER_API_ENABLED = True
+    SCHEDULER_TIMEZONE = "UTC"
     LOGGING = {
         'version': 1,
         'disable_existing_loggers': False,

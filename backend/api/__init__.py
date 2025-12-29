@@ -1,6 +1,7 @@
 #===APP INITIALIZATION
 from flask import Flask
 from flask_cors import CORS
+from flask_apscheduler import APScheduler
 import logging
 from .services.directories_init import directory_initialization
 from .config import Config
@@ -9,11 +10,22 @@ from logging.config import dictConfig
 #Init a loggger and its config
 LOGGER = logging.getLogger(__name__)
 
+#Init a scheduler
+scheduler = APScheduler()
+
 #===INIT APP
 def create_app():
     app = Flask(__name__)
     CORS(app)
+    scheduler.init_app(app)
+    scheduler.start()
     LOGGER.info("App is configuring...")
+
+    #===LOAD ALL JOBS BEFORE FIRST REQUEST
+    with app.app_context():
+        def load_tasks():
+            from .tasks import jobs
+        load_tasks()
 
     #===INITIALIZE DIRECTORIES
     init = directory_initialization()
