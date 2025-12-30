@@ -10,8 +10,7 @@ const BarChart = () => {
     // Fetch data from API
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:5000/api/analytics/vm/ram_cpu_usage');
-        await axios.put('http://127.0.0.1:5000/api/hardware_check/check')
+        const response = await axios.get('http://127.0.0.1:5000/api/analytics/vm/ram_cpu_usage'); 
         const data = response.data;
 
         // Mock data for demonstration
