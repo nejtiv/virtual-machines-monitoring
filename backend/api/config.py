@@ -41,6 +41,5 @@ class Config(object):
             '': {'handlers': ['console', 'file'], 'level': 'INFO'},
             'flask': {'level': 'WARNING'},
             'sqlalchemy': {'level': 'WARNING'},
-            'werkzeug': {'level': 'WARNING'}
         }
     }
