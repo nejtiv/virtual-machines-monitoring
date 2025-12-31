@@ -24,7 +24,7 @@ def create_app():
     #===LOAD ALL JOBS BEFORE FIRST REQUEST
     with app.app_context():
         def load_tasks():
-            from .tasks import jobs
+            from .tasks import scheduled_jobs
         load_tasks()
 
     #===INITIALIZE DIRECTORIES
