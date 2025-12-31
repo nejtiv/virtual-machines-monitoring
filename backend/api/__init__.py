@@ -38,7 +38,7 @@ def create_app():
     dictConfig(Config.LOGGING)
 
     #===REGISTER BLUEPRINTS
-    from .routes.crud_vmping import vm
+    from .routes.routes_virtualmachines import vm
     from .routes.routes_rdp import rdp
     from .routes.routes_hardwareinfo import hardware_check
     from .analytics.routes_analytics import analytics
