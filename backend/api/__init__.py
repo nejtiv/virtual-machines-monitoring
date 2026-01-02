@@ -24,7 +24,7 @@ def create_app():
     #===LOAD ALL JOBS BEFORE FIRST REQUEST
     with app.app_context():
         def load_tasks():
-            from .tasks import jobs
+            from .tasks import scheduled_jobs
         load_tasks()
 
     #===INITIALIZE DIRECTORIES
@@ -38,7 +38,7 @@ def create_app():
     dictConfig(Config.LOGGING)
 
     #===REGISTER BLUEPRINTS
-    from .routes.crud_vmping import vm
+    from .routes.routes_virtualmachines import vm
     from .routes.routes_rdp import rdp
     from .routes.routes_hardwareinfo import hardware_check
     from .analytics.routes_analytics import analytics
