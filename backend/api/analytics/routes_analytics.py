@@ -1,8 +1,8 @@
 #===ROUTES FOR ANALYTICS SERVICE [DASHBOARD, NOT JUST DISPLAYING PLAIN TABLE FROM SQL]
 from flask import Blueprint, request, jsonify
 from ..models.models_hardwareinfo import hardwareread
-from ..db_connection import sa, engine
-from ..registered_tables import virtualmachines, hardwareinfo
+from ..database.db_connection import sa, engine
+from ..database.registered_tables import virtualmachines, hardwareinfo
 
 analytics = Blueprint("analytics", __name__)
 

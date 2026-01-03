@@ -1,8 +1,8 @@
 #===REGISTER BACKGROUND JOBS
 from .. import scheduler
-from ..db_connection import sa, engine
+from ..database.db_connection import sa, engine
 from ..models.models_hardwareinfo import hardwareupdate
-from ..registered_tables import hardwareinfo
+from ..database.registered_tables import hardwareinfo
 from ..services.vm_ping import vm_ping
 from ..services.hardware_check import check_hardware
 
