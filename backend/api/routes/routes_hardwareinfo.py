@@ -1,8 +1,8 @@
 #===ROUTES FOR CHECKING HARDWARE INFO
 from flask import Blueprint, request, jsonify
-from ..db_connection import sa, engine
+from ..database.db_connection import sa, engine
 from ..models.models_hardwareinfo import hardwareupdate
-from ..registered_tables import hardwareinfo
+from ..database.registered_tables import hardwareinfo
 from ..services.hardware_check import check_hardware, check_online
 
 hardware_check = Blueprint("hardware_check", __name__)

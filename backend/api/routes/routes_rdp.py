@@ -1,7 +1,7 @@
 #===ROUTES FOR RDP SESSION SERVICES
 from flask import Blueprint, request, jsonify
-from ..db_connection import sa, engine
-from ..registered_tables import virtualmachines
+from ..database.db_connection import sa, engine
+from ..database.registered_tables import virtualmachines
 from ..services.rdp_sessions import create_rdp_session
 
 rdp = Blueprint("rdp", __name__)

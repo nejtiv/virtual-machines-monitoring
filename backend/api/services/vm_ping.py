@@ -1,8 +1,8 @@
 #===PINGING VIRTUAL MACHINES FOR RESPONSE
 import os
 import sys
-from ..registered_tables import virtualmachines
-from ..db_connection import sa, engine
+from ..database.registered_tables import virtualmachines
+from ..database.db_connection import sa, engine
 
 def vm_ping():
     #Query to read the all virtual machines id and ipv4

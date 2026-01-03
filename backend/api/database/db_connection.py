@@ -31,5 +31,3 @@ connection_url = sa.engine.URL.create(
 )
 
 engine = sa.create_engine(connection_url)
-
-engine.dialect.server_version_info = ((17, 0, 1000, 7))

@@ -4,7 +4,7 @@ from flask_cors import CORS
 from flask_apscheduler import APScheduler
 import logging
 from .services.directories_init import directory_initialization
-from .config import Config
+from .config.config import Config
 from logging.config import dictConfig
 
 #Init a loggger and its config

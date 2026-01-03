@@ -2,8 +2,8 @@
 from flask import Blueprint, jsonify, request
 from pydantic import ValidationError
 from ..models.models_vmping import vmcreate, vmread, vmupdate
-from ..db_connection import sa, engine
-from ..registered_tables import virtualmachines, hardwareinfo
+from ..database.db_connection import sa, engine
+from ..database.registered_tables import virtualmachines, hardwareinfo
 from ..services.vm_ping import vm_ping
 
 vm = Blueprint("vm", __name__)
