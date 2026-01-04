@@ -2,9 +2,9 @@
 from .. import scheduler
 from ..database.db_connection import sa, engine
 from ..models.models_hardwareinfo import hardwareupdate
-from ..database.registered_tables import hardwareinfo
+from ..database.registered_tables import hardwareinfo, virtualmachines
 from ..services.vm_ping import vm_ping
-from ..services.hardware_check import check_hardware
+from ..services.hardware_check import check_hardware, cyclic_restart
 
 #Virtual Machine Online/Offline check job
 @scheduler.task(trigger='interval', id='vm_ping', seconds=1)
@@ -47,4 +47,37 @@ def hardware_check_job():
                 )
             return results
     except Exception as e: 
+        return e
+    
+#Restart all Virtual Machines on the 11PM
+@scheduler.task(trigger='cron', id='cyclic_restart', hours=23)
+def cyclic_restart_job():
+    #List of Virtual Machines to append
+    results = []
+    try:
+        #Query to read all Virtual Machines ID and IP addresses
+        select_query = sa.select(virtualmachines.c.ipv4, virtualmachines.c.vm_id)
+        with engine.begin() as connection:
+            result = connection.execute(select_query).fetchall
+        #Iterate through all retrieved records
+        for vm in result:
+            vm_id = vm.vm_id
+            ipv4 = vm.ipv4
+            try:
+                cyclic_restart()
+                results.append(
+                    {
+                        "vm_id": vm_id,
+                        "status": "success!"
+                    }
+                )
+            except Exception:
+                results.append(
+                    {
+                        "vm_id": vm_id,
+                        "status": "failed!"
+                    }
+                )
+                return results
+    except Exception as e:
         return e

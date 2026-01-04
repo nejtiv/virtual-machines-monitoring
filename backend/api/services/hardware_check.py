@@ -16,3 +16,10 @@ def check_online(ipv4: str):
         return response.json()
     else:
         return response.status_code()
+    
+def cyclic_restart(ipv4: str):
+    response = requests.post(f"http://{ipv4}:5000/reboot", timeout=5)
+    if response.status_code == 200:
+        return response.json()
+    else:
+        return response.status_code()
