@@ -25,7 +25,7 @@ export default function VMForm({ initialData, submitLabel = "Save", onSubmit, on
           name="vm_name"
           value={vmName}
           onChange={(e) => setVmName(e.target.value)}
-          className="mt-1 block w-full border rounded px-3 py-2"
+          className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
           required
         />
       </div>
@@ -36,7 +36,7 @@ export default function VMForm({ initialData, submitLabel = "Save", onSubmit, on
           name="ipv4"
           value={ipv4}
           onChange={(e) => setIpv4(e.target.value)}
-          className="mt-1 block w-full border rounded px-3 py-2"
+          className="mt-1 block w-full border border-gray-300 rounded px-3 py-2"
           required
         />
       </div>
@@ -45,13 +45,13 @@ export default function VMForm({ initialData, submitLabel = "Save", onSubmit, on
         <button
           type="button"
           onClick={onCancel}
-          className="px-4 py-2 bg-gray-200 rounded"
+          className="px-4 py-2 bg-gray-200 hover:bg-gray-400 transition-colors rounded"
         >
           Cancel
         </button>
         <button
           type="submit"
-          className="px-4 py-2 bg-blue-600 text-white rounded"
+          className="px-4 py-2 bg-blue-600 hover:bg-blue-800 transition-colors text-white rounded"
         >
           {submitLabel}
         </button>

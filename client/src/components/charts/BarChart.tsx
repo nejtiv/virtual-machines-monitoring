@@ -2,23 +2,40 @@ import { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 import axios from 'axios';
 
-const BarChart = () => {
+interface Dataset {
+  label: string;
+  data: number[];
+  backgroundColor?: string;
+  borderColor?: string;
+  borderWidth?: number;
+}
+
+interface ChartDataConfig {
+  labels: string[];
+  datasets: Dataset[];
+}
+
+interface BarChartProps {
+  endpoint: string;
+  dataMapper: (data: any) => ChartDataConfig;
+  refreshInterval?: number;
+  title?: string;
+}
+
+const BarChart = ({
+  endpoint,
+  dataMapper,
+  refreshInterval = 2000,
+  title,
+}: BarChartProps) => {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstance = useRef<Chart | null>(null);
 
   useEffect(() => {
-    // Fetch data from API
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:5000/api/analytics/vm/ram_cpu_usage'); 
-        const data = response.data;
-
-        // Mock data for demonstration
-        // const data = {
-        //   labels: ['VM1', 'VM2', 'VM3', 'VM4', 'VM5'],
-        //   cpuUsage: [65, 59, 80, 81, 56],
-        //   ramUsage: [45, 49, 60, 71, 46],
-        // };
+        const response = await axios.get(endpoint);
+        const mappedData = dataMapper(response.data);
 
         if (chartRef.current) {
           const ctx = chartRef.current.getContext('2d');
@@ -29,27 +46,12 @@ const BarChart = () => {
             chartInstance.current = new Chart(ctx, {
               type: 'bar',
               data: {
-                labels: data.labels,
-                datasets: [
-                  {
-                    label: 'CPU Usage (%)',
-                    data: data.cpuUsage,
-                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                    borderColor: 'rgba(255, 99, 132, 1)',
-                    borderWidth: 1,
-                  },
-                  {
-                    label: 'RAM Usage (%)',
-                    data: data.ramUsage,
-                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
-                    borderColor: 'rgba(54, 162, 235, 1)',
-                    borderWidth: 1,
-                  },
-                ],
+                labels: mappedData.labels,
+                datasets: mappedData.datasets,
               },
               options: {
                 animation: {
-                  duration: 0
+                  duration: 0,
                 },
                 responsive: true,
                 maintainAspectRatio: false,
@@ -58,25 +60,31 @@ const BarChart = () => {
                     beginAtZero: true,
                   },
                 },
+                plugins: {
+                  title: title ? {
+                    display: true,
+                    text: title,
+                  } : undefined,
+                },
               },
             });
           }
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching chart data:', error);
       }
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 2000)
+    const interval = setInterval(fetchData, refreshInterval);
 
     return () => {
-      clearInterval(interval)
+      clearInterval(interval);
       if (chartInstance.current) {
         chartInstance.current.destroy();
       }
     };
-  }, []);
+  }, [endpoint, dataMapper, refreshInterval, title]);
 
   return <canvas ref={chartRef} />;
 };

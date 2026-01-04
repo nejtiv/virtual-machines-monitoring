@@ -2,22 +2,34 @@ import { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 import axios from 'axios';
 
-const PieChart = () => {
+interface PieChartDataConfig {
+  labels: string[];
+  data: number[];
+  backgroundColor?: string[];
+  hoverBackgroundColor?: string[];
+}
+
+interface PieChartProps {
+  endpoint: string;
+  dataMapper: (data: any) => PieChartDataConfig;
+  refreshInterval?: number;
+  title?: string;
+}
+
+const PieChart = ({
+  endpoint,
+  dataMapper,
+  refreshInterval = 60000,
+  title,
+}: PieChartProps) => {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstance = useRef<Chart | null>(null);
 
   useEffect(() => {
-    // Fetch data from API
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:5000/api/analytics/vm/online_offline');
-        const data = response.data;
-        
-        // Mock data for demonstration
-        // const data = {
-        //   online: 300,
-        //   offline: 50,
-        // };
+        const response = await axios.get(endpoint);
+        const mappedData = dataMapper(response.data);
 
         if (chartRef.current) {
           const ctx = chartRef.current.getContext('2d');
@@ -28,30 +40,50 @@ const PieChart = () => {
             chartInstance.current = new Chart(ctx, {
               type: 'pie',
               data: {
-                labels: ['Virtual Machines Online', 'Virtual Machines Offline'],
+                labels: mappedData.labels,
                 datasets: [
                   {
-                    label: 'VM Status',
-                    data: [data.online, data.offline],
-                    backgroundColor: ['#36A2EB', '#FF6384'],
-                    hoverBackgroundColor: ['#36A2EB', '#FF6384'],
+                    label: title || 'Data',
+                    data: mappedData.data,
+                    backgroundColor:
+                      mappedData.backgroundColor || [
+                        '#36A2EB',
+                        '#FF6384',
+                        '#FFCE56',
+                        '#4BC0C0',
+                        '#9966FF',
+                      ],
+                    hoverBackgroundColor:
+                      mappedData.hoverBackgroundColor || [
+                        '#36A2EB',
+                        '#FF6384',
+                        '#FFCE56',
+                        '#4BC0C0',
+                        '#9966FF',
+                      ],
                   },
                 ],
               },
               options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                plugins: {
+                  title: title ? {
+                    display: true,
+                    text: title,
+                  } : undefined,
+                },
               },
             });
           }
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching chart data:', error);
       }
     };
 
     fetchData();
-    const interval = setInterval(fetchData, 60000);
+    const interval = setInterval(fetchData, refreshInterval);
 
     return () => {
       clearInterval(interval);
@@ -59,7 +91,7 @@ const PieChart = () => {
         chartInstance.current.destroy();
       }
     };
-  }, []);
+  }, [endpoint, dataMapper, refreshInterval, title]);
 
   return <canvas ref={chartRef} />;
 };

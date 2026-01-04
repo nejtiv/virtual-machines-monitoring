@@ -66,10 +66,10 @@ function RDPSessions() {
       <Layout>
         <SideMenu>
           <h1
-            className="p-1 text-2xl text-blue-700 font-bold border-b border-gray-200 cursor-pointer"
+            className="p-1 text-md text-blue-700 font-bold border-b border-gray-200 cursor-pointer"
             onClick={navigateHome}
           >
-            Lileye Monitor
+            Aura
           </h1>
           <div className="flex flex-col mt-5 gap-3">
             <a
@@ -160,8 +160,8 @@ function RDPSessions() {
           </div>
         </SideMenu>
         <MainBoard>
-          <h1 className="p-1 pl-3 text-2xl font-bold border-b border-gray-200 bg-white">
-            Virtual Machines
+          <h1 className="p-1 pl-3 text-md font-bold border-b border-gray-200 bg-white">
+            RDP Sessions
           </h1>
           <div className="m-5 h-auto">
             <div className="overflow-x-auto bg-white rounded shadow">
