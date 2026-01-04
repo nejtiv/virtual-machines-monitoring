@@ -50,7 +50,7 @@ def hardware_check_job():
         return e
     
 #Restart all Virtual Machines on the 11PM
-@scheduler.task(trigger='cron', id='cyclic_restart', hours=23)
+@scheduler.task(trigger='cron', id='cyclic_restart', hour=23)
 def cyclic_restart_job():
     #List of Virtual Machines to append
     results = []
