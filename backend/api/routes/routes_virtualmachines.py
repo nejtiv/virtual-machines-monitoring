@@ -21,7 +21,7 @@ def vm_add():
             result = connection.execute(insert_query)
         #Retrieve the ID incremented with insert data to create record
         new_vm_id = result.inserted_primary_key[0]
-        insert_monitoring_query = sa.insert(hardwareinfo).values(ipv4 = dto.ipv4, vm_id = new_vm_id)
+        insert_monitoring_query = sa.insert(hardwareinfo).values(vm_id = new_vm_id)
         #Query to add virtual machine to monitoring
         with engine.begin() as connection:
             connection.execute(insert_monitoring_query)
@@ -33,7 +33,6 @@ def vm_add():
 def vm_read():
     try:
         #Calling function that pings virtual machine and updates its status
-        vm_ping()
         select_query = sa.select(virtualmachines)
         #Query to display registered virtual machines
         with engine.begin() as connection:

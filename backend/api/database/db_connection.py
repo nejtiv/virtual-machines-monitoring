@@ -30,4 +30,14 @@ connection_url = sa.engine.URL.create(
     query={"odbc_connect": connection_string}
 )
 
-engine = sa.create_engine(connection_url)
+#Connect to the Database, if not possible, start the app too
+engine = None
+def init_connection():
+    global engine
+    try: 
+        engine = sa.create_engine(connection_url)
+        return{"status": "Connnected to database."}
+    except Exception:
+        return{"status": "Cannot connect to the database."}
+    
+init_connection()

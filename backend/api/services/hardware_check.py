@@ -18,6 +18,7 @@ def check_online(ipv4: str):
         return response.status_code()
     
 def cyclic_restart(ipv4: str):
+    #Request to the agent to perform cyclic reboot of all Virtual Machines
     response = requests.post(f"http://{ipv4}:5000/reboot", timeout=5)
     if response.status_code == 200:
         return response.json()
