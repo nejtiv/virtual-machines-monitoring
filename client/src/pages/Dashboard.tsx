@@ -1,5 +1,4 @@
 //Components import
-import BarChart from "../components/charts/BarChart";
 import PieChart from "../components/charts/PieChart";
 import Layout from "../components/Layout";
 import MainBoard from "../components/MainBoard";
@@ -34,14 +33,14 @@ function Dashboard() {
     <>
       <Layout>
         <SideMenu>
-          <AsideContent/>
+          <AsideContent />
         </SideMenu>
         <MainBoard>
           <h1 className="p-1 pl-3 text-md font-bold border-b border-gray-200 bg-white">
             Monitoring Overview
           </h1>
-          <div className="m-5 h-auto md:h-auto lg:h-auto xl:h-auto 2xl:h-auto flex gap-3">
-            <div className="container mx-auto md:mx-auto lg:mx-auto xl:mx-auto 2xl:mx-auto px-4 m-4 border rounded-md border-gray-200 bg-white">
+          <div className="ml-5 mr-5 h-auto md:h-auto lg:h-auto xl:h-auto 2xl:h-auto flex">
+            <div className="mx-auto w-full md:mx-auto lg:mx-auto xl:mx-auto 2xl:mx-auto px-4 m-4 border rounded-md border-gray-200 bg-white">
               <a className="block font-semibold">
                 Virtual Machines Online: {vmData.online}
               </a>
@@ -50,7 +49,7 @@ function Dashboard() {
               </a>
             </div>
           </div>
-          <div className="m-5 h-auto md:h-auto lg:h-auto xl:h-auto 2xl:h-auto flex gap-3">
+          <div className="ml-5 mr-5 h-auto md:h-auto lg:h-auto xl:h-auto 2xl:h-auto flex gap-3">
             <div className="container mx-auto px-4 m-4 border rounded-md border-gray-200 bg-white h-96">
               <PieChart
                 endpoint="http://127.0.0.1:5000/api/analytics/vm/online_offline"
@@ -68,30 +67,11 @@ function Dashboard() {
               />
             </div>
             <div className="container mx-auto px-4 m-4 border rounded-md border-gray-200 bg-white h-96">
-              <BarChart
-                endpoint="http://127.0.0.1:5000/api/analytics/vm/ram_cpu_usage"
-                dataMapper={(data) => ({
-                  labels: data.labels,
-                  datasets: [
-                    {
-                      label: "CPU Usage (%)",
-                      data: data.cpuUsage,
-                      backgroundColor: "rgba(255, 99, 132, 0.2)",
-                      borderColor: "rgba(255, 99, 132, 1)",
-                      borderWidth: 1,
-                    },
-                    {
-                      label: "RAM Usage (%)",
-                      data: data.ramUsage,
-                      backgroundColor: "rgba(54, 162, 235, 0.2)",
-                      borderColor: "rgba(54, 162, 235, 1)",
-                      borderWidth: 1,
-                    },
-                  ],
-                })}
-                title="CPU & RAM Usage"
-                refreshInterval={2000}
-              />
+            </div>
+          </div>
+          <div className="ml-5 mr-5 h-auto md:h-auto lg:h-auto xl:h-auto 2xl:h-auto flex">
+            <div className=" border rounded-md border-gray-200 bg-white w-full h-86">
+              
             </div>
           </div>
         </MainBoard>

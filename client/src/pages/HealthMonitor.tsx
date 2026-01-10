@@ -69,7 +69,7 @@ function HealthMonitor() {
       </SideMenu>
       <MainBoard>
         <h1 className="p-1 pl-3 text-md font-bold border-b border-gray-200 bg-white">
-          Virtual Machines Health Monitor
+          VM Health Monitor
         </h1>
         <div className="m-5 h-auto">
           <div className="overflow-x-auto bg-white rounded shadow">
@@ -118,7 +118,7 @@ function HealthMonitor() {
                       </td>
                       <td className="px-6 py-4 text-center">
                         <Button
-                          className="px-3 py-1 bg-blue-600 hover:bg-blue-800 transition-colors text-white text-sm rounded"
+                          className="px-3 py-1 bg-black hover:bg-gray-500 transition-colors text-white text-sm rounded"
                           onClick={() => toggleRow(data.machine_id)}
                         >
                           {expandedRows[data.machine_id] ? "Hide" : "Details"}

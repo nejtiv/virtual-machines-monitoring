@@ -20,6 +20,7 @@ import {
   type VMCreateProps,
   type VMUpdateProps,
 } from "../services/virtualMachinesService";
+import { createRDPSession } from "../services/rdpSessionsService";
 
 function VirtualMachines() {
   const [vmList, setVmList] = useState<VMDisplayProps[]>([]);
@@ -85,6 +86,16 @@ function VirtualMachines() {
     }
   };
 
+  //Handle creating RDP Session
+  const handleCreateSession = async (id: number) =>{
+    try{
+       await createRDPSession(id)
+    }
+    catch(error){
+      console.error(error)
+    }
+  }
+
   return (
     <Layout>
       <SideMenu>
@@ -101,9 +112,6 @@ function VirtualMachines() {
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-50">
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
-                    ID
-                  </th>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
                     Name
                   </th>
@@ -122,9 +130,6 @@ function VirtualMachines() {
               <tbody className="bg-white divide-y divide-gray-100">
                 {vmList.map((vm) => (
                   <tr key={vm.vm_id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 text-sm text-gray-700">
-                      {vm.vm_id}
-                    </td>
                     <td className="px-6 py-4 text-sm font-medium text-gray-900">
                       {vm.vm_name}
                     </td>
@@ -142,20 +147,26 @@ function VirtualMachines() {
                         {vm.vm_status}
                       </span>
                     </td>
-                    <td className="px-6 py-4 text-center text-sm">
-                      <div className="flex justify-center gap-2">
+                    <td className="px-6 py-4 text-center justify-center text-sm">
+                      <div className="flex justify-center gap-3">
                         <Button
-                          className="bg-yellow-400 hover:bg-yellow-500 text-white rounded"
+                          className="bg-black hover:bg-gray-500 text-white transition-colors rounded cursor-pointer"
                           onClick={() => openEditModal(vm)}
                         >
                           Edit
                         </Button>
 
                         <Button
-                          className="bg-red-500 hover:bg-red-700 text-white rounded"
+                          className="bg-black hover:bg-gray-500 text-white transition-colors rounded cursor-pointer"
                           onClick={() => handleDelete(vm)}
                         >
                           Delete
+                        </Button>
+                        <Button
+                        className="bg-black hover:bg-gray-500 text-white transition-colors rounded cursor-pointer"
+                        onClick={() =>handleCreateSession(vm.vm_id)}
+                        >
+                          Create Session
                         </Button>
                       </div>
                     </td>
@@ -167,7 +178,7 @@ function VirtualMachines() {
 
           <div className="flex justify-end mt-4">
             <Button
-              className="bg-blue-600 text-white rounded hover:bg-blue-800"
+              className= "bg-black hover:bg-gray-500 text-white rounded cursor-pointer"
               onClick={openAddModal}
             >
               Add
