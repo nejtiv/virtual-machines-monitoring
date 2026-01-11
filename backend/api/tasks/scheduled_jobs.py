@@ -18,7 +18,7 @@ def hardware_check_job():
     results = []
     try:
         #Query to select all registered Virtual Machines for monitoring
-        select_query = sa.select(hardwareinfo.c.ipv4, hardwareinfo.c.vm_id)
+        select_query = sa.select(virtualmachines.c.ipv4, hardwareinfo.c.vm_id).select_from(virtualmachines).join(hardwareinfo, virtualmachines.c.vm_id == hardwareinfo.c.vm_id)
         with engine.begin() as connection:
             result = connection.execute(select_query).fetchall()
         for vm in result:
